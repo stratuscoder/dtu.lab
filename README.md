@@ -162,8 +162,9 @@ Command:
 kubectl get pods -n dynatrace
 ```
 Sample output:
-> NAME                             READY   STATUS    RESTARTS   AGE\
-> dynatrace-logs-collector-8q8tz   1/1     Running   0          1m
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| dynatrace-logs-collector-8q8tz   | 1/1   | Running | 0        | 1m  |
 
 ##### `filelog` receiver
 https://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver
@@ -288,8 +289,9 @@ Command:
 kubectl get pods -n dynatrace
 ```
 Sample output:
-> NAME                             READY   STATUS    RESTARTS   AGE\
-> dynatrace-logs-collector-dns4x   1/1     Running   0          1m
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| dynatrace-logs-collector-dns4x   | 1/1   | Running | 0        | 1m  |
 
 ##### Query logs in Dynatrace
 DQL:
@@ -325,8 +327,9 @@ Command:
 kubectl get pods -n dynatrace
 ```
 Sample output:
-> NAME                             READY   STATUS    RESTARTS   AGE\
-> dynatrace-logs-collector-fbtk5   1/1     Running   0          1m
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| dynatrace-logs-collector-fbtk5   | 1/1   | Running | 0        | 1m  |
 
 ##### Query logs in Dynatrace
 DQL:
@@ -372,8 +375,9 @@ Command:
 kubectl get pods -n dynatrace
 ```
 Sample output:
-> NAME                             READY   STATUS    RESTARTS   AGE\
-> dynatrace-logs-collector-xx6km   1/1     Running   0          1m
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| dynatrace-logs-collector-xx6km   | 1/1   | Running | 0        | 1m  |
 
 ##### Query logs in Dynatrace
 DQL:
