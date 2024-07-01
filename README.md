@@ -460,6 +460,7 @@ Sample output:
 
 ##### Generate events using deployment scale command
 https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/
+
 Command:
 ```sh
 kubectl scale deployment astronomy-shop-imageprovider -n astronomy-shop --replicas=2
@@ -495,6 +496,8 @@ By completing this lab, you've successfully deployed the OpenTelemetry Collector
   - The `k8sattributes` processor enriches the logs with Kubernetes attributes
   - The `resourcedetection` processor enriches the logs with cloud and cluster (GCP/GKE) attributes
   - The `resource` processor enriches the logs with custom (resource) attributes
+- The Community Contrib Distro of OpenTelemetry Collector includes modules needed to ship events to Dynatrace
+  - The `k8sobjects` receiver watches for Kubernetes events (and other resources) on the cluster
 - Dynatrace DQL (via Notebooks) allows you to perform powerful queries and analysis of the log data
 
 <!-- ------------------------ -->
