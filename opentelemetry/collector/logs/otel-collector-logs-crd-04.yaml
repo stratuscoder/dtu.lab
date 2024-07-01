@@ -38,11 +38,11 @@ spec:
         include:
           # Include only astronomy-shop namespace logs
           - /var/log/pods/astronomy-shop_*/*/*.log
+          # Include only dynatrace namespace logs
+          - /var/log/pods/dynatrace_*/*/*.log
           #- /var/log/pods/*/*/*.log
           #- /var/log/containers/*.log
-        exclude:
-          # Exclude logs from all containers named otel-collector
-          - /var/log/pods/*/otel-collector/*.log
+        exclude: {}
         start_at: beginning
         include_file_path: true
         include_file_name: false
@@ -189,7 +189,7 @@ spec:
     service:
       telemetry:
         logs:
-          level: "debug"
+          level: "info"
         metrics:
           level: "detailed"
       pipelines:

@@ -38,7 +38,7 @@ spec:
           value: opentelemetry
           action: insert
         - key: dynatrace.otel.collector
-          value: dynatrace-logs
+          value: dynatrace-events
           action: insert
         - key: dt.security_context
           from_attribute: k8s.cluster.name
