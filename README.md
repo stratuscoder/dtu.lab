@@ -383,9 +383,12 @@ Sample output:
 DQL:
 ```sql
 fetch logs
-| filter dynatrace.otel.collector == "dynatrace-logs"
+| filter isNotNull(dt.security_context)
+| filter isNotNull(cloud.account.id) and isNotNull(k8s.cluster.name)
+| filter k8s.namespace.name == "astronomy-shop" and isNotNull(k8s.deployment.name)
 | sort timestamp desc
 | limit 100
+| fields timestamp, loglevel, status, dt.security_context, dynatrace.otel.collector, cloud.account.id, k8s.cluster.name, k8s.namespace.name, k8s.deployment.name, content
 ```
 Result:\
 ![dql_resource_processor](img/dql_resource_processor.png)
