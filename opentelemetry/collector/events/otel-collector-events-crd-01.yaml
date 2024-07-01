@@ -8,7 +8,7 @@ spec:
   envFrom:
   - secretRef:
       name: dynatrace-otelcol-dt-api-credentials
-  mode: "daemonset"
+  mode: "deployment"
   image: "otel/opentelemetry-collector-contrib:latest"
   observability:
     metrics:
