@@ -121,6 +121,12 @@ spec:
             field: attributes.logtag # always the same value
           - type: remove
             field: attributes.time # duplicate value of timestamp
+      k8sobjects/events:
+        auth_type: serviceAccount
+        objects:
+          - name: events
+            mode: watch
+            namespaces: [astronomy-shop,dynatrace]
 
     processors:
       batch:
@@ -194,6 +200,6 @@ spec:
           level: "detailed"
       pipelines:
         logs:
-          receivers: [filelog]
+          receivers: [filelog,k8sobjects/events]
           processors: [resourcedetection/gcp,resource,k8sattributes,batch]
           exporters: [otlphttp/dynatrace,debug]

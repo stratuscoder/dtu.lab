@@ -13,3 +13,7 @@ rules:
 - apiGroups: ["extensions"]
   resources: ["replicasets"]
   verbs: ["get", "list", "watch"]
+# k8sobjects/events
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "watch", "list"]

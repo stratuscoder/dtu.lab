@@ -124,6 +124,10 @@ spec:
         endpoint: "${env:DT_ENDPOINT}"
         headers:
           Authorization: "Api-Token ${env:DT_API_TOKEN}"
+      debug:
+        verbosity: basic
+        sampling_initial: 5
+        sampling_thereafter: 20
 
     service:
       telemetry:
@@ -135,4 +139,4 @@ spec:
         logs:
           receivers: [filelog]
           processors: [batch]
-          exporters: [otlphttp/dynatrace]
+          exporters: [otlphttp/dynatrace,debug]
