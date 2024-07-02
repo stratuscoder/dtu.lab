@@ -33,6 +33,8 @@ Duration: 2
   - tested on v1.22.1
 - [OpenTelemetry Collector - Dynatrace Distro](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment)
   - tested on v0.8.0
+- [OpenTelemetry Collector - Contrib Distro](https://github.com/open-telemetry/opentelemetry-collector-contrib/releases/tag/v0.103.0)
+  - tested on v0.103.0
 
 #### Reference Architecture
 TODO
@@ -413,6 +415,39 @@ receivers:
 
 The `k8sobjects` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
 
+#### Deploy OpenTelemetry Collector - Contrib Distro - Deployment (Gateway)
+https://github.com/open-telemetry/opentelemetry-operator
+```yaml
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: dynatrace-events
+  namespace: dynatrace
+spec:
+  envFrom:
+  - secretRef:
+      name: dynatrace-otelcol-dt-api-credentials
+  mode: "deployment"
+  image: "otel/opentelemetry-collector-contrib:0.103.0"
+```
+Command:
+```sh
+kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
+```
+Sample output:
+> opentelemetrycollector.opentelemetry.io/dynatrace-events created
+
+##### Validate running pod(s)
+Command:
+```sh
+kubectl get pods -n dynatrace
+```
+Sample output:
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| dynatrace-events-collector-559d5b9d77-rb26d   | 1/1   | Running | 0        | 1m  |
+
 ##### Create `clusterrole` with read access to Kubernetes events
 ```yaml
 ---
@@ -459,39 +494,6 @@ Command:
 ```sh
 kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
 ```
-
-#### Deploy OpenTelemetry Collector - Contrib Distro - Deployment (Gateway)
-https://github.com/open-telemetry/opentelemetry-operator
-```yaml
----
-apiVersion: opentelemetry.io/v1alpha1
-kind: OpenTelemetryCollector
-metadata:
-  name: dynatrace-events
-  namespace: dynatrace
-spec:
-  envFrom:
-  - secretRef:
-      name: dynatrace-otelcol-dt-api-credentials
-  mode: "deployment"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
-```
-Command:
-```sh
-kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
-```
-Sample output:
-> opentelemetrycollector.opentelemetry.io/dynatrace-events created
-
-##### Validate running pod(s)
-Command:
-```sh
-kubectl get pods -n dynatrace
-```
-Sample output:
-| NAME                             | READY | STATUS  | RESTARTS | AGE |
-|----------------------------------|-------|---------|----------|-----|
-| dynatrace-events-collector-559d5b9d77-rb26d   | 1/1   | Running | 0        | 1m  |
 
 ##### Generate events using deployment scale command
 https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/
