@@ -10,9 +10,6 @@ spec:
       name: dynatrace-otelcol-dt-api-credentials
   mode: "daemonset"
   image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest"
-  podAnnotations:
-      metrics.dynatrace.com/scrape: 'true'
-      metrics.dynatrace.com/port: '8888'
   observability:
     metrics:
       enableMetrics: true
@@ -41,11 +38,11 @@ spec:
         include:
           # Include only astronomy-shop namespace logs
           - /var/log/pods/astronomy-shop_*/*/*.log
+          # Include only dynatrace namespace logs
+          - /var/log/pods/dynatrace_*/*/*.log
           #- /var/log/pods/*/*/*.log
           #- /var/log/containers/*.log
-        exclude:
-          # Exclude logs from all containers named otel-collector
-          - /var/log/pods/*/otel-collector/*.log
+        exclude: {}
         start_at: beginning
         include_file_path: true
         include_file_name: false
@@ -154,14 +151,20 @@ spec:
         #  node_from_env_var: KUBE_NODE_NAME
         extract:
           metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.daemonset.name
+            - k8s.job.name
+            - k8s.cronjob.name
+            - k8s.replicaset.name
+            - k8s.statefulset.name
             - k8s.pod.name
             - k8s.pod.uid
-            - k8s.deployment.name
-            - k8s.namespace.name
             - k8s.node.name
+            - k8s.container.name
             - container.id
             - container.image.name
-            - k8s.container.name
+            - container.image.tag
           labels:
             - tag_name: app.label.component
               key: app.kubernetes.io/component
@@ -184,15 +187,19 @@ spec:
         endpoint: "${env:DT_ENDPOINT}"
         headers:
           Authorization: "Api-Token ${env:DT_API_TOKEN}"
+      debug:
+        verbosity: basic
+        sampling_initial: 5
+        sampling_thereafter: 20
 
     service:
       telemetry:
         logs:
-          level: "debug"
+          level: "info"
         metrics:
           level: "detailed"
       pipelines:
         logs:
           receivers: [filelog]
           processors: [resourcedetection/gcp,resource,k8sattributes,batch]
-          exporters: [otlphttp/dynatrace]
+          exporters: [otlphttp/dynatrace,debug]

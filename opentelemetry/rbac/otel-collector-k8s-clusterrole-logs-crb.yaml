@@ -9,5 +9,5 @@ subjects:
   namespace: dynatrace
 roleRef:
   kind: ClusterRole
-  name: otel-collector-k8s-clusterrole
+  name: otel-collector-k8s-clusterrole-logs
   apiGroup: rbac.authorization.k8s.io

@@ -132,7 +132,7 @@ spec:
     service:
       telemetry:
         logs:
-          level: "debug"
+          level: "info"
         metrics:
           level: "detailed"
       pipelines:

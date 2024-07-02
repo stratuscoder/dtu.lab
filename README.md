@@ -1,4 +1,4 @@
-id: dt-k8s-otel-logs-lab
+id: dt-k8s-otel-o11y-logs
 summary: dynatrace log ingest for kubernetes using opentelemetry collector
 author: Tony Pope-Cruz
 
@@ -199,7 +199,7 @@ Result:\
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: otel-collector-k8s-clusterrole
+  name: otel-collector-k8s-clusterrole-logs
 rules:
 - apiGroups: [""]
   resources: ["pods", "namespaces", "nodes"]
@@ -213,10 +213,10 @@ rules:
 ```
 Command:
 ```sh
-kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole.yaml
+kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-logs.yaml
 ```
 Sample output:
-> clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole created
+> clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-logs created
 
 ##### Create `clusterrolebinding` for OpenTelemetry Collector service account
 ```yaml
@@ -231,7 +231,7 @@ subjects:
   namespace: dynatrace
 roleRef:
   kind: ClusterRole
-  name: otel-collector-k8s-clusterrole
+  name: otel-collector-k8s-clusterrole-logs
   apiGroup: rbac.authorization.k8s.io
 ```
 Command:
@@ -251,14 +251,20 @@ k8sattributes:
         node_from_env_var: KUBE_NODE_NAME
     extract:
         metadata:
-        - k8s.pod.name
-        - k8s.pod.uid
-        - k8s.deployment.name
-        - k8s.namespace.name
-        - k8s.node.name
-        - container.id
-        - container.image.name
-        - k8s.container.name
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.daemonset.name
+            - k8s.job.name
+            - k8s.cronjob.name
+            - k8s.replicaset.name
+            - k8s.statefulset.name
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.node.name
+            - k8s.container.name
+            - container.id
+            - container.image.name
+            - container.image.tag
         labels:
         - tag_name: app.label.component
             key: app.kubernetes.io/component
@@ -404,19 +410,27 @@ receivers:
         mode: watch
         namespaces: [astronomy-shop,dynatrace]
 ```
-`ClusterRole` with permission to capture the events:
+
+The `k8sobjects` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
+
+##### Create `clusterrole` with read access to Kubernetes events
 ```yaml
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: otel-collector-k8s-clusterrole
+  name: otel-collector-k8s-clusterrole-events
 rules:
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["get", "watch", "list"]
 ```
-The `k8sobjects` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
+Command:
+```sh
+kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events.yaml
+```
+Sample output:
+> clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events created
 
 ##### Create `clusterrolebinding` for OpenTelemetry Collector service account
 ```yaml
@@ -431,7 +445,7 @@ subjects:
   namespace: dynatrace
 roleRef:
   kind: ClusterRole
-  name: otel-collector-k8s-clusterrole
+  name: otel-collector-k8s-clusterrole-events
   apiGroup: rbac.authorization.k8s.io
 ```
 Command:
@@ -441,6 +455,27 @@ kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.ya
 Sample output:
 > clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events-crb created
 
+Command:
+```sh
+kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
+```
+
+#### Deploy OpenTelemetry Collector - Contrib Distro - Deployment (Gateway)
+https://github.com/open-telemetry/opentelemetry-operator
+```yaml
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: dynatrace-events
+  namespace: dynatrace
+spec:
+  envFrom:
+  - secretRef:
+      name: dynatrace-otelcol-dt-api-credentials
+  mode: "deployment"
+  image: "otel/opentelemetry-collector-contrib:0.103.0"
+```
 Command:
 ```sh
 kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
@@ -464,6 +499,13 @@ https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/
 Command:
 ```sh
 kubectl scale deployment astronomy-shop-imageprovider -n astronomy-shop --replicas=2
+```
+Sample output:
+> deployment.apps/astronomy-shop-imageprovider scaled
+
+Command:
+```sh
+kubectl scale deployment astronomy-shop-imageprovider -n astronomy-shop --replicas=1
 ```
 Sample output:
 > deployment.apps/astronomy-shop-imageprovider scaled

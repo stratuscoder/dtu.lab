@@ -11,7 +11,7 @@ default:
     - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       value: cumulative
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: 'service.name=$(OTEL_SERVICE_NAME),service.namespace=tpc-opentelemetry-demo,service.version={{ .Chart.AppVersion }}'
+      value: 'service.name=$(OTEL_SERVICE_NAME),service.namespace=NAME_TO_REPLACE,service.version={{ .Chart.AppVersion }}'
   # Allows overriding and additions to .Values.default.env
   envOverrides: []
   #  - name: OTEL_K8S_NODE_NAME
@@ -427,7 +427,7 @@ components:
       - name: LOCUST_WEB_PORT
         value: "8089"
       - name: LOCUST_USERS
-        value: "2"
+        value: "1"
       - name: LOCUST_SPAWN_RATE
         value: "1"
       - name: LOCUST_HOST
@@ -671,7 +671,7 @@ opentelemetry-collector:
     exporters:
       # Dynatrace OTel Collector
       otlphttp/dtcollector:
-        endpoint: http://dynatrace-otel-collector.dynatrace.svc.cluster.local:4318
+        endpoint: http://dynatrace-logs-collector.dynatrace.svc.cluster.local:4318
 
     processors:
       resource:
