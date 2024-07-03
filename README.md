@@ -490,11 +490,6 @@ kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.ya
 Sample output:
 > clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events-crb created
 
-Command:
-```sh
-kubectl apply -f opentelemetry/collector/events/otel-collector-events-crd-01.yaml
-```
-
 ##### Generate events using deployment scale command
 https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/
 
