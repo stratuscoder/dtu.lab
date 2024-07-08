@@ -89,6 +89,7 @@ In your GCP CloudShell Terminal:
 ```
 DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
 DT_API_TOKEN={your-api-token}
+NAME=<INITIALS>-k8s-otel-o11y
 ```
 ### OpenTelemetry Collector - Dynatrace Distro
 https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment
@@ -487,6 +488,8 @@ fetch logs
 ```
 Result:\
 ![dql_otel_sdk_logs](img/dql_otel_sdk_logs.png)
+
+### Collect Kubernetes Events from Cluster API
 
 ##### Add `k8sobjects` receiver to collect Kubernetes events as logs
 https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver
