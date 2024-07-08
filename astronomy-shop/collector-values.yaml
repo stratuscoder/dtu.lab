@@ -427,7 +427,7 @@ components:
       - name: LOCUST_WEB_PORT
         value: "8089"
       - name: LOCUST_USERS
-        value: "1"
+        value: "2"
       - name: LOCUST_SPAWN_RATE
         value: "1"
       - name: LOCUST_HOST
@@ -669,9 +669,13 @@ opentelemetry-collector:
           - endpoint: 'http://{{ include "otel-demo.name" . }}-frontendproxy:8080'
 
     exporters:
-      # Dynatrace OTel Collector
-      otlphttp/dtcollector:
+      # Dynatrace OTel Collectors
+      otlphttp/dttraces:
+        endpoint: http://dynatrace-traces-collector.dynatrace.svc.cluster.local:4318
+      otlphttp/dtlogs:
         endpoint: http://dynatrace-logs-collector.dynatrace.svc.cluster.local:4318
+      otlphttp/dtmetrics:
+        endpoint: http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318
 
     processors:
       resource:
@@ -688,14 +692,14 @@ opentelemetry-collector:
         traces:
           receivers: [otlp]
           processors: [memory_limiter, resource, batch]
-          exporters: [spanmetrics, otlphttp/dtcollector]
+          exporters: [spanmetrics, otlphttp/dttraces]
         metrics:
           receivers: [httpcheck/frontendproxy, otlp, spanmetrics]
           processors: [memory_limiter, resource, batch]
-          exporters: [otlphttp/dtcollector]
+          exporters: [otlphttp/dtmetrics]
         logs:
           processors: [memory_limiter, resource, batch]
-          exporters: [otlphttp/dtcollector]
+          exporters: [otlphttp/dtlogs]
 
 jaeger:
   enabled: false
