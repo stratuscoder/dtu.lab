@@ -28,7 +28,7 @@ Duration: 2
 - [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
   - tested on GKE v1.29.4-gke.1043002
 - [OpenTelemetry Demo astronomy-shop](https://opentelemetry.io/docs/demo/)
-  - tested on release 1.10.0
+  - tested on release 1.10.0, helm chart release 0.31.0
 - [Istio](https://istio.io/latest/docs/)
   - tested on v1.22.1
 - [OpenTelemetry Collector - Dynatrace Distro](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment)
@@ -468,7 +468,7 @@ sed -i "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml
 #### Update `astronomy-shop` OpenTelemetry Collector export endpoint via helm
 Command:
 ```sh
-helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/collector-values.yaml --namespace astronomy-shop
+helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
 ```
 Sample output:
 > NAME: astronomy-shop\
