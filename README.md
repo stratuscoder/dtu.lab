@@ -505,6 +505,48 @@ receivers:
 
 The `k8sobjects` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
 
+#### Create `clusterrole` with read access to Kubernetes events
+```yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-collector-k8s-clusterrole-events
+rules:
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "watch", "list"]
+```
+Command:
+```sh
+kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events.yaml
+```
+Sample output:
+> clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events created
+
+#### Create `clusterrolebinding` for OpenTelemetry Collector service account
+```yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-collector-k8s-clusterrole-events-crb
+subjects:
+- kind: ServiceAccount
+  name: dynatrace-events-collector
+  namespace: dynatrace
+roleRef:
+  kind: ClusterRole
+  name: otel-collector-k8s-clusterrole-events
+  apiGroup: rbac.authorization.k8s.io
+```
+Command:
+```sh
+kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.yaml
+```
+Sample output:
+> clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events-crb created
+
 #### Deploy OpenTelemetry Collector - Contrib Distro - Deployment (Gateway)
 https://github.com/open-telemetry/opentelemetry-operator
 ```yaml
@@ -537,48 +579,6 @@ Sample output:
 | NAME                             | READY | STATUS  | RESTARTS | AGE |
 |----------------------------------|-------|---------|----------|-----|
 | dynatrace-events-collector-559d5b9d77-rb26d   | 1/1   | Running | 0        | 1m  |
-
-##### Create `clusterrole` with read access to Kubernetes events
-```yaml
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: otel-collector-k8s-clusterrole-events
-rules:
-- apiGroups: [""]
-  resources: ["events"]
-  verbs: ["get", "watch", "list"]
-```
-Command:
-```sh
-kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events.yaml
-```
-Sample output:
-> clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events created
-
-##### Create `clusterrolebinding` for OpenTelemetry Collector service account
-```yaml
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: otel-collector-k8s-clusterrole-events-crb
-subjects:
-- kind: ServiceAccount
-  name: dynatrace-events-collector
-  namespace: dynatrace
-roleRef:
-  kind: ClusterRole
-  name: otel-collector-k8s-clusterrole-events
-  apiGroup: rbac.authorization.k8s.io
-```
-Command:
-```sh
-kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.yaml
-```
-Sample output:
-> clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events-crb created
 
 ##### Generate events using deployment scale command
 https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/
