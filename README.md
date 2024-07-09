@@ -82,7 +82,7 @@ Ingest OpenTelemetry traces
 ![dt access token](img/dt_access_token.png)
 
 #### (optional) Import Notebook into Dynatrace
-[notebook](/k8s-otel-o11y-logs_dt_notebook.json)
+[notebook](/dt-k8s-otel-o11y-logs_dt_notebook.json)
 
 #### Define workshop user variables
 In your GCP CloudShell Terminal:
