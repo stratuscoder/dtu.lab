@@ -8,14 +8,15 @@ author: Tony Pope-Cruz
 Total Duration: 20
 
 ### What You’ll Learn Today
-In this lab we'll utilize the OpenTelemetry Collector deployed as a DaemonSet (Node Agent) to collect pod/container logs from a Kubernetes cluster and ship them to Dynatrace.
+In this lab we'll utilize the OpenTelemetry Collector deployed as a DaemonSet (Node Agent) to collect pod/container logs from a Kubernetes cluster and ship them to Dynatrace.  Additionally, we'll deploy the OpenTelemetry Collector as a Deployment (Gateway) to watch Kubernetes Events from the Cluster and ship them to Dynatrace.
 
 Lab tasks:
 1. Create a Kubernetes cluster on Google GKE
 2. Deploy OpenTelemetry's demo application, astronomy-shop
 3. Deploy OpenTelemetry Collector as a DaemonSet
-4. Configure OpenTelemetry Collector service pipeline for log enrichment
-5. Query and visualize logs in Dynatrace using DQL
+4. Deploy OpenTelemetry Collector as a Deployment
+5. Configure OpenTelemetry Collector service pipeline for log enrichment
+6. Query and visualize logs in Dynatrace using DQL
 
 ![astronomy-shop logs](img/astronomy-shop_logs.png)
 
