@@ -128,7 +128,7 @@ Sample output:
 #### Deploy `opentelemetry-operator`
 Command:
 ```sh
-kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/download/v0.103.0/opentelemetry-operator.yaml
 ```
 Sample output:
 > namespace/opentelemetry-operator-system created\
