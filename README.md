@@ -5,7 +5,7 @@ author: Tony Pope-Cruz
 # Kubernetes Log Ingest with OpenTelemetry & Dynatrace
 <!-- ------------------------ -->
 ## Overview 
-Total Duration: 20
+Total Duration: 20 minutes
 
 ### What You’ll Learn Today
 In this lab we'll utilize the OpenTelemetry Collector deployed as a DaemonSet (Node Agent) to collect pod/container logs from a Kubernetes cluster and ship them to Dynatrace.  Additionally, we'll deploy the OpenTelemetry Collector as a Deployment (Gateway) to watch Kubernetes Events from the Cluster and ship them to Dynatrace.
@@ -611,10 +611,6 @@ fetch logs
 Result:\
 ![dql_k8s_events](img/dql_k8s_events.png)
 
-<!-- ------------------------ -->
-## Demo The New Functionality
-TODO
-
 <!-- -------------------------->
 ## Wrap Up
 
@@ -632,4 +628,4 @@ By completing this lab, you've successfully deployed the OpenTelemetry Collector
 
 <!-- ------------------------ -->
 ### Supplemental Material
-TODO
+N/A
