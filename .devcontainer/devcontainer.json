@@ -56,6 +56,14 @@
 
   // // Add recommended secrets
   "secrets": {
-
+    "DT_TENANT_ID": {
+      "description": "eg. https://abc12345.live.dynatrace.com ***just the abc12345" 
+    },
+    "DT_API_TOKEN": {
+      "description": "Dynatrace auth token with all ingest scopes"
+    },
+    "DT_USER": {
+      "description": "Your unique name or initials"
+    }
   }
 }
